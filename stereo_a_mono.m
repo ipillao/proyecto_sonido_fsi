@@ -14,9 +14,17 @@ end
 
 % Default output name
 if nargin < 2 || isempty(outFile)
-    [p,n,~] = fileparts(inFile);
+    [p,n,~] = fileparts(inFile);    %fileparts devuelve la ruta(p), el nombre del archivo sin extensión(n) y  extensión (~). 
     outFile = fullfile(p, [n '_mono.mp3']);
 end
+
+[p,n,~] = fileparts(inFile);
+
+if contains(n, '_mono', 'IgnoreCase', true)
+    fprintf('Saltando %s porque ya ha sido pasada a mono\n', inFile);
+    return;
+end
+
 
 % Read audio
 [audio, fs] = audioread(inFile);
@@ -34,11 +42,13 @@ end
 % Convert to mono by averaging channels (simple mix)
 mono = mean(audio, 2);
 
+disp(mono);
+
 % Optional: avoid clipping by normalizing if needed
-maxAbs = max(abs(mono));
-if maxAbs > 1
-    mono = mono / maxAbs;
-end
+% maxAbs = max(abs(mono));
+% if maxAbs > 1
+%     mono = mono / maxAbs;
+% end
 
 % Write mono mp3 (use default settings; add 'BitRate' if desired)
 audiowrite(outFile, mono, fs);
