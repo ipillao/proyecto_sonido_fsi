@@ -1,6 +1,6 @@
 %Generar espectrograma de la canción
 
-[audio, fs] = audioread("./Songs/000_mono.mp3");
+[audio, fs] = audioread("./Songs/003_mono.mp3");
 
 spectrogram(audio, hann(8192), 4096, 8192, fs, 'yaxis');
 
@@ -72,6 +72,40 @@ end
 
 %[filaPicos, colPicos] = find(S_log > nivel_truncado);
 
+
+% Crear las relaciones entre los picos picos
+
+delta_t_min = 0.1; % segundos
+delta_t_max = 1.0; % segundos
+
+db = containers.Map('KeyType', 'char','ValueType', 'any');
+
+for k = 1:length(picos_f)
+
+    f_anchor = picos_f(k);
+    t_anchor = picos_t(k);
+
+    % Buscar picos en la zona objetivo
+
+    for m = k+1:length(picos_f)
+
+        f_target = picos_f(m);
+        t_target = picos_t(m);
+
+        dt = T(t_target) - T(t_anchor);
+
+        if dt > delta_t_min && dt < delta_t_max
+            % Crear hash
+            hash = keyHash([F(f_anchor), F(f_target), dt, T(t_anchor)]);
+            disp(hash);
+
+        end
+    end
+end
+
+
+            
+
 imagesc(T, F, S_log);
 axis xy;
 colormap jet;
@@ -83,3 +117,28 @@ plot(T(picos_t), F(picos_f), '.', 'Color', [1 1 1], 'MarkerSize', 7);
 title("Espectrograma con puntos por encima del umbral");
 xlabel("Tiempo (s)");
 ylabel("Frecuencia (Hz)");
+
+% for k = 1:length(picos_f)
+% 
+%     f_anchor = picos_f(k);
+%     t_anchor = picos_t(k);
+% 
+%     for m = k+1:length(picos_f)
+% 
+%         f_target = picos_f(m);
+%         t_target = picos_t(m);
+% 
+%         dt = T(t_target) - T(t_anchor);
+% 
+%         if dt > delta_t_min && dt < delta_t_max
+%             % Dibujar línea entre anchor y target
+%             plot([T(t_anchor), T(t_target)], ...
+%                  [F(f_anchor), F(f_target)], ...
+%                  'Color', [1 1 0 0.3], 'LineWidth', 1);
+%         end
+%     end
+% end
+% 
+% title("Espectrograma con picos y relaciones (hashes visualizados)");
+% xlabel("Tiempo (s)");
+% ylabel("Frecuencia (Hz)");
