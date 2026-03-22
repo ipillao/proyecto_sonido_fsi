@@ -116,7 +116,7 @@ for k = 1:length(picos_f)
 end
 
 save(database, "db");
-disp("Guardado correctamente");
+disp("Guardado correctamente: "+id_cancion);
 
 
 % imagesc(T, F, S_log);
