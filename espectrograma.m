@@ -1,4 +1,5 @@
 %Generar espectrograma de la canción
+id_cancion = "003";
 
 [audio, fs] = audioread("./Songs/003_mono.mp3");
 
@@ -78,7 +79,7 @@ end
 delta_t_min = 0.1; % segundos
 delta_t_max = 1.0; % segundos
 
-db = containers.Map('KeyType', 'char','ValueType', 'any');
+db = containers.Map('KeyType', 'uint64','ValueType', 'any');
 
 for k = 1:length(picos_f)
 
@@ -96,12 +97,25 @@ for k = 1:length(picos_f)
 
         if dt > delta_t_min && dt < delta_t_max
             % Crear hash
-            hash = keyHash([F(f_anchor), F(f_target), dt, T(t_anchor)]);
-            disp(hash);
+            clave = keyHash([F(f_anchor), F(f_target), dt]);
+
+            valor = [id_cancion, T(t_anchor)];
+
+            if isKey(db, clave)
+                db(clave) = [db(clave); valor];
+            else
+                db(clave) = valor;
+            
+            end
+            %disp(clave);
 
         end
     end
 end
+
+save("database.mat", "db");
+disp("Se han guardado los hashes");
+
 
 
             
