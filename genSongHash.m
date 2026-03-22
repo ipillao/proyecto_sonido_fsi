@@ -1,12 +1,23 @@
+function genSongHash(fileSong,database)
+%genSongHas
+%   Guarda los hashes de las relaciones de la canción que se le pase por
+%   parámetro en la colección clave-valor que se le pase por parámetro.
+% arguments (Input)
+%     inputArg1
+%     inputArg2
+% end
+
 %Generar espectrograma de la canción
-id_cancion = "003";
+[~, nombre, ~] = fileparts(fileSong);   % nombre = "003_mono"
+partes = split(nombre, "_");
+codigo_cancion = partes{1};   % "003"
 
-[audio, fs] = audioread("./Songs/003_mono.mp3");
+id_cancion = codigo_cancion;
 
-spectrogram(audio, hann(8192), 4096, 8192, fs, 'yaxis');
+[audio, fs] = audioread(fileSong); %"./Songs/003_mono.mp3"
 
-%[S, W, T] = spectrogram(audio, hann(2048), 1536, 2048, fs, 'yaxis');
-%colorbar;
+%spectrogram(audio, hann(8192), 4096, 8192, fs, 'yaxis');
+
 
 %S: matriz que contiene los niveles de energía en cada ventana, 
 % W: matriz que contiene las frecuencias que corresponden en la tabla S 
@@ -39,7 +50,7 @@ for i = 1:size_celda:size(S_log,1)
 
         bloque = S_truncado(i:f_fin, j:t_fin);
 
-        [max_val, idx] = max(bloque(:));
+        [~, idx] = max(bloque(:));
 
         if all(isinf(bloque(:)))
             continue
@@ -60,16 +71,17 @@ for i = 1:size_celda:size(S_log,1)
     end
 end
 
-
-%[filaPicos, colPicos] = find(S_log > nivel_truncado);
-
-
 % Crear las relaciones entre los picos picos
 
 delta_t_min = 0.1; % segundos
 delta_t_max = 1.0; % segundos
 
-db = containers.Map('KeyType', 'uint64','ValueType', 'any');
+%db = containers.Map('KeyType', 'uint64','ValueType', 'any');
+if isfile("database.mat")
+    load(database, "db");
+else
+    db = containers.Map('KeyType','uint64','ValueType','any');
+end
 
 for k = 1:length(picos_f)
 
@@ -103,43 +115,20 @@ for k = 1:length(picos_f)
     end
 end
 
-save("database.mat", "db");
-disp("Se han guardado los hashes");
+save(database, "db");
+disp("Guardado correctamente");
 
 
-imagesc(T, F, S_log);
-axis xy;
-colormap jet;
-hold on;
-clim([min(S_log(:)) max(S_log(:))]);  % fija los colores
-
-plot(T(picos_t), F(picos_f), '.', 'Color', [1 1 1], 'MarkerSize', 7);
-
-title("Espectrograma con puntos por encima del umbral");
-xlabel("Tiempo (s)");
-ylabel("Frecuencia (Hz)");
-
-% for k = 1:length(picos_f)
+% imagesc(T, F, S_log);
+% axis xy;
+% colormap jet;
+% hold on;
+% clim([min(S_log(:)) max(S_log(:))]);  % fija los colores
 % 
-%     f_anchor = picos_f(k);
-%     t_anchor = picos_t(k);
+% plot(T(picos_t), F(picos_f), '.', 'Color', [1 1 1], 'MarkerSize', 7);
 % 
-%     for m = k+1:length(picos_f)
-% 
-%         f_target = picos_f(m);
-%         t_target = picos_t(m);
-% 
-%         dt = T(t_target) - T(t_anchor);
-% 
-%         if dt > delta_t_min && dt < delta_t_max
-%             % Dibujar línea entre anchor y target
-%             plot([T(t_anchor), T(t_target)], ...
-%                  [F(f_anchor), F(f_target)], ...
-%                  'Color', [1 1 0 0.3], 'LineWidth', 1);
-%         end
-%     end
-% end
-% 
-% title("Espectrograma con picos y relaciones (hashes visualizados)");
+% title("Espectrograma con puntos por encima del umbral");
 % xlabel("Tiempo (s)");
 % ylabel("Frecuencia (Hz)");
+
+end
