@@ -2,7 +2,7 @@ function matchSong(fileSong,database, Ftime)
 %matchSong: Hace el shazam de la canción por parámetro comparado con la
 %base de datos. Se hace empezando en un t al azar durante Ftime.
 % Ftime = duración del fragmento
-%   Detailed explanation goes here
+
 
 % archivo = dir(fileSong);
 % fileSong = fullfile(archivo.folder, archivo.name);
@@ -10,11 +10,20 @@ function matchSong(fileSong,database, Ftime)
 
 [audio, fs] = audioread(fileSong);
 
-[S, F, T] = spectrogram(audio, hann(2048), 1024, 2048, fs, 'yaxis');
+%Elegir el fragmento a comparar aleatoriamente
+
+maxRand = length(audio) - Ftime*fs; %el valor máximo de inicio que puede tocar es el inicio del último fragmento completo que puede haber
+inicio = randi([1, maxRand]);
+
+fragmento = audio(inicio: inicio+(Ftime*fs)-1,1);
+
+% Analizar el fragmento
+
+[S, F, T] = spectrogram(fragmento, hann(2048), 1024, 2048, fs, 'yaxis');
 
 S_mag = abs(S); % Pasamos S a magnitud, haciendo el módulo.
 
-S_log = 20*log10(S_mag); %+eps
+S_log = 20*log10(S_mag);
 
 nivel_truncado = max(S_log(:)) - 40; % Calcula el nivel mínimo de amplitud para truncar
 
