@@ -2,10 +2,7 @@ function genSongHash(fileSong,database)
 %genSongHas
 %   Guarda los hashes de las relaciones de la canción que se le pase por
 %   parámetro en la colección clave-valor que se le pase por parámetro.
-% arguments (Input)
-%     inputArg1
-%     inputArg2
-% end
+
 
 %Generar espectrograma de la canción
 [~, nombre, ~] = fileparts(fileSong);   % nombre = "003_mono"
@@ -77,10 +74,10 @@ delta_t_min = 0.1; % segundos
 delta_t_max = 1.0; % segundos
 
 %db = containers.Map('KeyType', 'uint64','ValueType', 'any');
-if isfile("database.mat")
+if isfile(database)
     load(database, "db");
 else
-    db = containers.Map('KeyType','uint64','ValueType','any');
+    db = dictionary();
 end
 
 for k = 1:length(picos_f)
@@ -99,16 +96,16 @@ for k = 1:length(picos_f)
 
         if dt > delta_t_min && dt < delta_t_max
             % Crear hash
-            clave = keyHash([F(f_anchor), F(f_target), dt]);
+            clave = keyHash([round(F(f_anchor)), round(F(f_target)), round(dt,2)]);
 
-            valor = [id_cancion, T(t_anchor)];
+            valor = id_cancion;
 
-            if isKey(db, clave)
-                db(clave) = [db(clave); valor];
-            else
-                db(clave) = valor;
+            % if isKey(db, clave)
+            %     db(clave) = [db(clave); valor];
+            % else
+            db(clave) = valor;
             
-            end
+            %end
             %disp(clave);
 
         end

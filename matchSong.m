@@ -95,20 +95,21 @@ for k = 1:length(picos_f)
 
         if dt > delta_t_min && dt < delta_t_max
             % Crear hash
-            clave = keyHash([F(f_anchor), F(f_target), dt]);
+            clave = keyHash([round(F(f_anchor)), round(F(f_target)), round(dt,2)]);
 
             
             if isKey(db, clave)
-                apariciones = db(clave);
+                coincidencias = [coincidencias,db(clave)]; % Se guardan los id de canciones que coinciden con los hashes generados
 
                 %t_anchor_match = T(t_anchor); 
                 
-                for i = 1:size(apariciones,1)
-                    song_id_db = apariciones(i,1);
-                    t_anchor_db = apariciones(i,2);
+                % for i = 1:size(apariciones,1)
+                %     song_id_db = apariciones(i,1);
+                %     t_anchor_db = apariciones(i,2);
+                %     %coincidencias = [coincidencias; song_id_db, t_anchor_db];
 
-                    coincidencias = [coincidencias; song_id_db, t_anchor_db];
-                end
+                % end
+
             end
         end
     end
@@ -122,7 +123,7 @@ if isempty(coincidencias)
 end
 % Contar las coincidencias y determinar la canción más probable
 
-songs_ids = coincidencias(:,1);
+songs_ids = coincidencias(:);
 [unique_ids, ~, idx] = unique(songs_ids);
 counts = accumarray(idx,1);
 
@@ -130,7 +131,7 @@ counts = accumarray(idx,1);
 
 disp("-- Coincidencias por canción --");
 for i = 1:length(unique_ids)
-    fprintf('ID: %d, Coincidencias: %d\n', unique_ids(i), counts(i));
+    fprintf('ID: %s --> %0.f\n', unique_ids(i), counts(i)); 
 end
 
 % Determinar la canción con más coincidencias (ganadora)
