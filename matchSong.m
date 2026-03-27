@@ -1,4 +1,4 @@
-function matchSong(fileSong,database, Ftime)
+function cancion_encontrada = matchSong(fileSong,database, Ftime)
 %matchSong: Hace el shazam de la canción por parámetro comparado con la
 %base de datos. Se hace empezando en un t al azar durante Ftime.
 % Ftime = duración del fragmento
@@ -138,6 +138,7 @@ end
 
 [~, pos] = max(counts);
 song_ganadora = unique_ids(pos);
+cancion_encontrada = song_ganadora;
 
 disp("Canción identificada: "+ string(song_ganadora));
 
