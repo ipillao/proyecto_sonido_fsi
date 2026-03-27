@@ -6,7 +6,7 @@ for k = 1:20%length(claves)
     %clave = claves{k};
     valor = db(claves(k));
     disp("Clave: ");
-    disp(clave);
+    disp(claves(k));
 
     disp("Valor:");
     disp(valor);
