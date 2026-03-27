@@ -83,19 +83,19 @@ for k = 1:length(picos_f)
 
     f_anchor = picos_f(k);
     t_anchor = picos_t(k);
-
+    f1 = floor(F(f_anchor)/30)*30;
     % Buscar picos en la zona objetivo
 
     for m = k+1:length(picos_f)
 
         f_target = picos_f(m);
         t_target = picos_t(m);
-
+        f2 = floor(F(f_target)/30)*30;
         dt = T(t_target) - T(t_anchor);
-
-        if dt > delta_t_min && dt < delta_t_max
+        dt_q = floor(dt*10)/10;
+        if dt_q > delta_t_min && dt < delta_t_max
             % Crear hash
-            clave = keyHash([round(F(f_anchor)), round(F(f_target)), round(dt,2)]);
+            clave = keyHash([f1, f2, dt_q]);
 
             
             if isKey(db, clave)
