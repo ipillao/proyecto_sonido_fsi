@@ -73,7 +73,6 @@ end
 delta_t_min = 0.1; % segundos
 delta_t_max = 1.0; % segundos
 
-%db = containers.Map('KeyType', 'uint64','ValueType', 'any');
 if isfile(database)
     load(database, "db");
 else
