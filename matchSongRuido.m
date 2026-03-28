@@ -1,4 +1,4 @@
-function cancion_encontrada = matchSong(fileSong,database, Ftime)
+function cancion_encontrada = matchSongRuido(fileSong,database, Ftime)
 %matchSong: Hace el shazam de la canción por parámetro comparado con la
 %base de datos. Se hace empezando en un t al azar durante Ftime.
 % Ftime = duración del fragmento
@@ -16,6 +16,8 @@ maxRand = length(audio) - Ftime*fs; %el valor máximo de inicio que puede tocar 
 inicio = randi([1, maxRand]);
 
 fragmento = audio(inicio: inicio+(Ftime*fs)-1,1);
+
+fragmento = function_add_noise(fragmento); % Añadir ruido al fragmento
 
 % Analizar el fragmento
 
