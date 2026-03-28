@@ -79,7 +79,7 @@ for k = 1:length(picos_f)
 
         if dt > delta_t_min && dt < delta_t_max
             % Crear hash
-            claves = [claves,keyHash([round(F(f_anchor)), round(F(f_target)), round(dt,2)])];
+            claves = [claves,hashConsistente([round(F(f_anchor)), round(F(f_target)), round(dt,2)])]; %SHA-256
 
         end
     end
