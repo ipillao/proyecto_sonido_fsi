@@ -28,6 +28,8 @@ else
     return
 end
 
+tic;
+
 claves = analizadorPicos(fragmento,fs);
 
 mascara = isKey(db,claves);
@@ -46,6 +48,9 @@ songs_ids = coincidencias(:);
 [unique_ids, ~, idx] = unique(songs_ids);
 counts = accumarray(idx,1);
 
+tiempoTranscurrido = toc;
+
+
 %Coincidencias agrupadas por canción
 
 disp("-- Coincidencias por canción --");
@@ -60,6 +65,8 @@ song_ganadora = unique_ids(pos);
 cancion_encontrada = song_ganadora;
 
 disp("Canción identificada: "+ string(song_ganadora));
+fprintf('Tiempo transcurrido en analizar el fragmento y buscar coincidencias: %.4f s\n', tiempoTranscurrido);
+
 
 end
 

@@ -15,6 +15,8 @@ function cancion_encontrada = matchSongNoRandom(fileSong,database,inicio, Ftime)
 %maxRand = length(audio) - Ftime*fs; %el valor máximo de inicio que puede tocar es el inicio del último fragmento completo que puede haber
 inicio = fs*inicio;
 
+tic;
+
 fragmento = audio(inicio: inicio+(Ftime*fs)-1,1);
 
 if isfile("database.mat")
@@ -41,6 +43,9 @@ songs_ids = coincidencias(:);
 [unique_ids, ~, idx] = unique(songs_ids);
 counts = accumarray(idx,1);
 
+tiempoTranscurrido = toc;
+
+
 %Coincidencias agrupadas por canción
 
 disp("-- Coincidencias por canción --");
@@ -55,6 +60,9 @@ song_ganadora = unique_ids(pos);
 cancion_encontrada = song_ganadora;
 
 disp("Canción identificada: "+ string(song_ganadora));
+
+fprintf('Tiempo transcurrido en analizar el fragmento y buscar coincidencias: %.4f s\n', tiempoTranscurrido);
+
 
 end
 
