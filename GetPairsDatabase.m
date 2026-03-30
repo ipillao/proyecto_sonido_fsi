@@ -1,3 +1,6 @@
+% Recorre las claves de la base de datos imprimiendo su valor
+% correspondiente
+
 load('database.mat', "db");
 
 claves = keys(db);
