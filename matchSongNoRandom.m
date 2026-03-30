@@ -35,6 +35,7 @@ coincidencias = db(claves);
 
 if isempty(coincidencias)
     disp("No se encontraron coincidencias");
+    cancion_encontrada = missing;
     return;
 end
 % Contar las coincidencias y determinar la canción más probable

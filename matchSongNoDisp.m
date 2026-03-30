@@ -1,4 +1,4 @@
-function cancion_encontrada = matchSong(fileSong,database, Ftime)
+function cancion_encontrada = matchSongNoDisp(fileSong,database, Ftime)
 %matchSong: Hace el shazam de la canción por parámetro comparado con la
 %base de datos. Se hace empezando en un t al azar durante Ftime.
 % Ftime = duración del fragmento
@@ -38,7 +38,7 @@ coincidencias = db(claves);
 % Votar por la canción que más se matchea
 
 if isempty(coincidencias)
-    disp("No se encontraron coincidencias");
+    %disp("No se encontraron coincidencias");
     cancion_encontrada = missing;
     return;
 end
@@ -52,10 +52,10 @@ tiempoTranscurrido = toc;
 
 %Coincidencias agrupadas por canción
 
-disp("-- Coincidencias por canción --");
-for i = 1:length(unique_ids)
-    fprintf('ID: %s --> %0.f\n', unique_ids(i), counts(i)); 
-end
+% disp("-- Coincidencias por canción --");
+% for i = 1:length(unique_ids)
+%     fprintf('ID: %s --> %0.f\n', unique_ids(i), counts(i)); 
+% end
 
 % Determinar la canción con más coincidencias (ganadora)
 
@@ -63,9 +63,9 @@ end
 song_ganadora = unique_ids(pos);
 cancion_encontrada = song_ganadora;
 
-disp("Canción identificada: "+ string(song_ganadora));
-
-fprintf('Tiempo transcurrido en analizar el fragmento y buscar coincidencias: %.4f s\n', tiempoTranscurrido);
+% disp("Canción identificada: "+ string(song_ganadora));
+% 
+% fprintf('Tiempo transcurrido en analizar el fragmento y buscar coincidencias: %.4f s\n', tiempoTranscurrido);
 
 end
 
