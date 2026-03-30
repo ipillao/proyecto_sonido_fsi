@@ -1,18 +1,18 @@
 function [inFile,outFile] = stereo_a_mono(inFile,outFile)
 
-% stereoToMono Convert a stereo .mp3 to mono .mp3
-%   stereoToMono(inFile) writes mono file next to input with suffix "_mono.mp3"
-%   stereoToMono(inFile, outFile) writes mono to specified outFile.
+% stereo_a_mo Convierte de estéreo .mp3 a mono .mp3
+%   stereo_a_mono(inFile) la salida va a ser [archivo_estéreo]+"_mono.mp3"
+%   stereo_a_mono(inFile, outFile) saca la salida mono en la ruta outFile especificada.
 %
-%   Example:
-%     stereoToMono('song_stereo.mp3')
-%     stereoToMono('song_stereo.mp3','song_mono.mp3')
+%   Ejemplo:
+%     stereo_a_mono('000.mp3')
+%     stereo_a_mono('000.mp3','000_mono.mp3')
 
 if nargin < 1 || isempty(inFile)
     error('Input filename required.');
 end
 
-% Default output name
+% Nombre de salida de archivo por defecto
 if nargin < 2 || isempty(outFile)
     [p,n,~] = fileparts(inFile);    %fileparts devuelve la ruta(p), el nombre del archivo sin extensión(n) y  extensión (~). 
     outFile = fullfile(p, [n '_mono.mp3']);
@@ -26,31 +26,27 @@ if contains(n, '_mono', 'IgnoreCase', true)
 end
 
 
-% Read audio
+% Lee el audio
 [audio, fs] = audioread(inFile);
 
 %disp(audio);
 disp(size(audio,2));
 % audio es matriz
 
-% If already mono, just copy (or rewrite)
+% Si el original está en mono, se copia
 if size(audio,2) == 1
     audiowrite(outFile, audio, fs);
     return
 end
 
-% Convert to mono by averaging channels (simple mix)
+% Convierte a mono mezclando los dos canales (media de los dos canales)
 mono = mean(audio, 2);
 
 disp(mono);
 
-% Optional: avoid clipping by normalizing if needed
-% maxAbs = max(abs(mono));
-% if maxAbs > 1
-%     mono = mono / maxAbs;
-% end
 
-% Write mono mp3 (use default settings; add 'BitRate' if desired)
+
+% Escribe el audio mono
 audiowrite(outFile, mono, fs);
 
 end
