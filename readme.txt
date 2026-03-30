@@ -5,6 +5,9 @@ El repositorio incluye un archivo "database.mat" que contiene el diccionario con
 Si se desea crear una base de datos nueva con las canciones contenidas en Songs, puede hacerse ejecutando el script GenerarDb.m, que procesa todos los
 archivos de audio presentes en la carpeta Songs y genera un nuevo "database.mat".
 
+Solo se deben de reconocer canciones en mono, por tanto, la ruta al archivo debe ser siempre './Songs/[num_cancion]_mono.mp3'.
+Empezando num_cancion en "000" y terminando en "050".
+
 
 1. RECONOCER UN FRAGMENTO DE TIEMPO FTIME E INICIO ALEATORIO
     matchSong(fileSong,database, Ftime)
